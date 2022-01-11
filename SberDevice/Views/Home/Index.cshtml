@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="Menu">
+
+    <div>
+        <div>@Html.ActionLink("Загрузка серийных номеров по маске (диапозоны)", "Index", "LoadSer")</div>
+    </div>
+    <div>
+        <div>@Html.ActionLink("Замена упакованного продукта", "Index", "ReplacePacking")</div>
+    </div>
+    <div>
+        <div>@Html.ActionLink("Проверка отчёта китайцев и упаковки", "Index", "CheckReport")</div>
+    </div>
+
+</div>
+
+<style>
+
+    .Menu {
+        margin-left:auto, 5%;
+    }
+
+        .Menu div {
+            margin: 1%;
+            padding: 1%;
+        }
+
+        .Menu div div {
+            margin:1%;
+            padding:1%;
+            background-color: lightgreen;
+            font-weight:bold;
+            font-size: 30px;
+            color: black;
+        }
+
+</style>

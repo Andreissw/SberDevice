@@ -1,0 +1,45 @@
+﻿@model SberDevice.Classes.Replace.Class.InfoPacking
+
+@{
+    ViewBag.Title = "GetPacking";
+}
+
+
+    <table class="table">
+        <tr>
+            <th colspan="12">Информация упаковки</th>
+        </tr>
+        <tr>
+            <th>Баркод</th>
+            <th>Серийный Номер</th>
+            <th>МакАдресс</th>
+            <th>Литер</th>
+            <th>Линия</th>
+            <th>Паллет</th>
+            <th>Коробка</th>
+            <th>Номер № </th>
+            <th>Дата упаковки</th>
+            <th>Кто упаковал</th>
+            <th>Описание</th>
+            <th>Заказ</th>
+        </tr>
+        <tr>
+            <td>@Model.Decode</td>
+            <td>@Model.SN</td>
+            <td>@Model.Mac</td>
+            <td>@Model.Liter</td>
+            <td>@Model.LineName</td>
+            <td>@Model.PalletNum</td>
+            <td>@Model.BoxNum</td>
+            <td>@Model.UnitNum</td>
+            <td>@Model.PackingDate</td>
+            <td>@Model.UserName </td>
+            <td>@Model.Description</td>
+            <td>@Model.OrderName</td>
+            
+        </tr>
+    </table>
+
+
+
+

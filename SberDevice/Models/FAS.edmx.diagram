@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c9810811ae794c7d929ce6a8cc0b525b" Name="Diagram1">
+        <EntityTypeShape EntityType="FASModel.Contract_LOT" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FASModel.Ct_FASSN_reg" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FASModel.Ct_PackingTable" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FASModel.Ct_OperLog" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FASModel.FAS_Lines" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="FASModel.FAS_Liter" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="FASModel.FAS_Users" Width="1.5" PointX="7.375" PointY="3.75" />
+        <EntityTypeShape EntityType="FASModel.Depo_SN_MAC" Width="1.5" PointX="7.375" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
