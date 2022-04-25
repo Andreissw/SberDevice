@@ -11,8 +11,8 @@ namespace SberDevice.Interface
     {
         Datas Datas { get; set; }        
         bool IsPacking();
-
         bool IsBunch(string FirstSN);
+        void MergeData(ISearch search);
         InfoPacking GetInfoPacking();
     }
 }

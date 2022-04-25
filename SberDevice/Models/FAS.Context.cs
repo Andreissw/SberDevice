@@ -25,13 +25,16 @@ namespace SberDevice.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Contract_LOT> Contract_LOT { get; set; }
         public virtual DbSet<Ct_FASSN_reg> Ct_FASSN_reg { get; set; }
         public virtual DbSet<Ct_PackingTable> Ct_PackingTable { get; set; }
         public virtual DbSet<Ct_OperLog> Ct_OperLog { get; set; }
         public virtual DbSet<FAS_Lines> FAS_Lines { get; set; }
         public virtual DbSet<FAS_Liter> FAS_Liter { get; set; }
-        public virtual DbSet<FAS_Users> FAS_Users { get; set; }
         public virtual DbSet<Depo_SN_MAC> Depo_SN_MAC { get; set; }
+        public virtual DbSet<Ct_StepResult> Ct_StepResult { get; set; }
+        public virtual DbSet<Ct_StepScan> Ct_StepScan { get; set; }
+        public virtual DbSet<Ct_TestResult> Ct_TestResult { get; set; }
+        public virtual DbSet<Contract_LOT> Contract_LOT { get; set; }
+        public virtual DbSet<FAS_Users> FAS_Users { get; set; }
     }
 }

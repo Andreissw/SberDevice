@@ -14,8 +14,14 @@ namespace SberDevice.Models
     
     public partial class Contract_LOT
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Contract_LOT()
+        {
+            this.Ct_OperLog = new HashSet<Ct_OperLog>();
+        }
+    
         public int ID { get; set; }
-        public Nullable<short> LOTCode { get; set; }
+        public string LOTCode { get; set; }
         public int ModelID { get; set; }
         public string Specification { get; set; }
         public string FullLOTCode { get; set; }
@@ -43,6 +49,8 @@ namespace SberDevice.Models
         public Nullable<int> LOTSize { get; set; }
         public Nullable<int> LOT_Shipped { get; set; }
         public string FASNumberFormat2 { get; set; }
-        public Nullable<System.DateTime> DateManufacter { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ct_OperLog> Ct_OperLog { get; set; }
     }
 }

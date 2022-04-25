@@ -130,6 +130,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Replace\Class\Datas.cs" />
     <Compile Include="Classes\Replace\Class\InfoPacking.cs" />
+    <Compile Include="Classes\Replace\Class\LogResult.cs" />
+    <Compile Include="Classes\Replace\Class\Mask.cs" />
+    <Compile Include="Classes\Replace\Class\ResultReplace.cs" />
     <Compile Include="Classes\Replace\Search\ScanPCBID.cs" />
     <Compile Include="Classes\Replace\Search\ScanSN.cs" />
     <Compile Include="Controllers\CheckReportController.cs" />
@@ -140,6 +143,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Interface\ISearch.cs" />
+    <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Contract_LOT.cs">
       <DependentUpon>FAS.tt</DependentUpon>
     </Compile>
@@ -150,6 +154,15 @@
       <DependentUpon>FAS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Ct_PackingTable.cs">
+      <DependentUpon>FAS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ct_StepResult.cs">
+      <DependentUpon>FAS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ct_StepScan.cs">
+      <DependentUpon>FAS.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ct_TestResult.cs">
       <DependentUpon>FAS.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Depo_SN_MAC.cs">
@@ -245,6 +258,7 @@
     <Content Include="Models\SMD.edmx.diagram">
       <DependentUpon>SMD.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -272,6 +286,7 @@
     <Content Include="Views\LoadSer\Index.cshtml" />
     <Content Include="Views\CheckReport\Index.cshtml" />
     <Content Include="Views\ReplacePacking\GetPacking.cshtml" />
+    <Content Include="Views\ReplacePacking\GetResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

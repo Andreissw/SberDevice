@@ -29,6 +29,11 @@ namespace SberDevice.Classes
             return true;
         }
 
+        public void MergeData(ISearch search)
+        {
+            Datas.PCBID = search.Datas.PCBID;            
+        }
+
         public InfoPacking GetInfoPacking()
         {
             //var pcbid = Fas.Ct_PackingTable.Where(c => c.SNID == Datas.ID).Select(c => c.PCBID).FirstOrDefault();

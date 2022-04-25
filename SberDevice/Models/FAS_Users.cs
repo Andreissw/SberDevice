@@ -19,6 +19,5 @@ namespace SberDevice.Models
         public string UserName { get; set; }
         public bool IsActiv { get; set; }
         public byte UsersGroupID { get; set; }
-        public Nullable<int> IDService { get; set; }
     }
 }

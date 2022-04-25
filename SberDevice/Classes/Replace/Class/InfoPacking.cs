@@ -21,9 +21,11 @@ namespace SberDevice.Classes.Replace.Class
         public string OrderName { get; set; }
         public int LOTID { get; set; }
         public int SNID { get; set; }
-        public int PCBID { get; set; }
+        public int? PCBID { get; set; }
         public int LiterID { get; set; }
         public int LiterIndex { get; set; }
+
+        public int pcbid { get; set; }
         
 
 

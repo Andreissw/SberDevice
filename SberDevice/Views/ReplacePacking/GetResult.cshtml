@@ -1,0 +1,77 @@
+﻿@model SberDevice.Classes.Replace.Class.ResultReplace
+
+@{
+    ViewBag.Title = "GetResult";
+}
+
+<h2>Результат замены упаковки</h2>
+
+<table class="table">
+    <tr>
+        <th colspan="12">Информация упаковки</th>
+    </tr>
+    <tr>
+        <th>Баркод</th>
+        <th>Серийный Номер</th>
+        <th>МакАдресс</th>
+        <th>Литер</th>
+        <th>Линия</th>
+        <th>Паллет</th>
+        <th>Коробка</th>
+        <th>Номер № </th>
+        <th>Дата упаковки</th>
+        <th>Кто упаковал</th>
+        <th>Описание</th>
+        <th>Заказ</th>
+    </tr>
+    <tr>
+        <td>@Model.InfoPacking.Decode</td>
+        <td>@Model.InfoPacking.SN</td>
+        <td>@Model.InfoPacking.Mac</td>
+        <td>@Model.InfoPacking.Liter</td>
+        <td>@Model.InfoPacking.LineName</td>
+        <td>@Model.InfoPacking.PalletNum</td>
+        <td>@Model.InfoPacking.BoxNum</td>
+        <td>@Model.InfoPacking.UnitNum</td>
+        <td>@Model.InfoPacking.PackingDate</td>
+        <td>@Model.InfoPacking.UserName </td>
+        <td>@Model.InfoPacking.Description</td>
+        <td>@Model.InfoPacking.OrderName</td>
+
+    </tr>
+</table>
+
+
+    <table class="table">
+        <tr>
+            <th colspan="12">Информация по логу</th>
+        </tr>
+        <tr>
+            <th>Заказ</th>
+            <th>Писание</th>
+            <th>Дата</th>
+            <th>Серийный номер</th>
+            <th>Баркод</th>
+            <th>Шаг</th>
+            <th>Результат</th>
+            <th>Пользователь</th>           
+            
+        </tr>
+        @foreach (var item in Model.Results)
+        {
+            <tr>
+                <td>@item.OrderName</td>
+                <td>@item.Description</td>
+                <td>@item.Date</td>
+                <td>@item.SN</td>
+                <td>@item.Decode</td>               
+                <td>@item.Step</td>
+                <td>@item.Result</td>
+                <td>@item.User</td>
+            </tr>
+        }
+        
+    </table>
+
+
+

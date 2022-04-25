@@ -28,26 +28,26 @@ namespace SberDevice
             return result.ToString();           
         }
 
-        public void RemovePac()
+        public void RemovePac(ISearch search)
         {
             var fas = new FASEntities();
-            var result = fas.Ct_PackingTable.Where(c => c.SNID == Search.Datas.ID).FirstOrDefault();
+            var result = fas.Ct_PackingTable.Where(c => c.SNID == search.Datas.ID).FirstOrDefault();
+            infoPacking = search.GetInfoPacking();
 
-            infoPacking = Search.GetInfoPacking();
-            SetLog(1,3);
+            SetLog(1,3, search);
 
             fas.Ct_PackingTable.Remove(result);
             fas.SaveChanges();
         }
 
-        public void AddPac(ISearch data)
+        public void AddPac()
         {            
             var fas = new FASEntities();
             Ct_PackingTable ct_PackingTable = new Ct_PackingTable()
             { 
-                PCBID = data.Datas.PCBID,
-                SNID = data.Datas.ID,
-                LOTID = data.Datas.LOTID,
+                PCBID = Search.Datas.PCBID,
+                SNID = Search.Datas.ID,
+                LOTID = (int)Search.Datas.LOTID,
                 LiterID = (byte)infoPacking.LiterID,
                 LiterIndex = (short)infoPacking.LiterIndex,
                 BoxNum = infoPacking.BoxNum,
@@ -61,28 +61,47 @@ namespace SberDevice
             fas.Ct_PackingTable.Add(ct_PackingTable);
             fas.SaveChanges();
 
-            SetLog(6,2);
+            SetLog(6,2,Search);
 
         }
 
-        void SetLog(int stepid, int TestResult)
+        void SetLog(int stepid, int TestResult,ISearch data)
         {
-            var fas = new FASEntities();
-            Ct_OperLog ct_OperLog = new Ct_OperLog()
+            if (data.Datas.PCBID != null)
             {
-                LOTID = infoPacking.LOTID,
-                StepID = (short)stepid,
-                TestResultID = (byte)TestResult,
-                Descriptions = "Замена упаковки: " + Description,
-                PCBID = infoPacking.PCBID,
-                SNID = infoPacking.SNID,
-                StepByID = (short)UserID,
-                StepDate = DateTime.UtcNow.AddHours(2),
-            };
-
-            fas.Ct_OperLog.Add(ct_OperLog);
-            fas.SaveChanges();
+                Connection.SelectString($@" use fas insert into [FAS].[dbo].[Ct_OperLog]
+                                   (PCBID,LOTID,StepID,TestResultID,StepDate,StepByID,Descriptions,SNID)
+                                   values
+                                   ({data.Datas.PCBID},{data.Datas.LOTID},{stepid},{TestResult},CURRENT_TIMESTAMP,{UserID},'Замена упаковки: {Description}', {data.Datas.ID} )");
+            }
+            else
+            {
+                Connection.SelectString($@" use fas insert into [FAS].[dbo].[Ct_OperLog]
+                                   (PCBID,LOTID,StepID,TestResultID,StepDate,StepByID,Descriptions,SNID)
+                                   values
+                                   (null,{data.Datas.LOTID},{stepid},{TestResult},CURRENT_TIMESTAMP,{UserID},'Замена упаковки: {Description}', {data.Datas.ID} )");
+            }
+            
         }
+
+        //void SetLog(int stepid, int TestResult)
+        //{
+        //    var fas = new FASEntities();
+        //    Ct_OperLog ct_OperLog = new Ct_OperLog()
+        //    {
+        //        LOTID = infoPacking.LOTID,
+        //        StepID = (short)stepid,
+        //        TestResultID = (byte)TestResult,
+        //        Descriptions = "Замена упаковки: " + Description,
+        //        PCBID = infoPacking.PCBID,
+        //        SNID = infoPacking.SNID,
+        //        StepByID = (short)UserID,
+        //        StepDate = DateTime.UtcNow.AddHours(2),
+        //    };
+
+        //    fas.Ct_OperLog.Add(ct_OperLog);
+        //    fas.SaveChanges();
+        //}
 
 
     }

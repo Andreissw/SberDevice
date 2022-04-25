@@ -7,34 +7,31 @@
 <h2>Замена упаковки</h2>
 
 <div>
+    <div class="btn btn-success" onclick="Clear()"> Сбросить </div>
+</div>
+
+<div>
     <div>
-        @Html.TextBox("TB", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте Сериый номер или номер платы, который необходимо удалить с упаковки", @onkeydown = "ScanSN(value)" })
+        @Html.TextBox("TB", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте Сериый номер или номер платы, который необходимо удалить с упаковки", @onkeydown = "ScanSN(this)" })
     </div>
 
-    <div class="ScanSN" id="SN">
-        @Html.TextBox("ScanSN", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте второй номер", @onkeydown = "SN(value)" })
+    <div class="ScanReplace" id="replace">
+        @Html.TextBox("ScanReplace", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте номер платы или серийный номер, который хотите заменить", @onkeydown = "RpcF(this)" })
+    </div>
+
+    <div class="ScanReplace2" id="replace2">
+        @Html.TextBox("ScanReplace2", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте второй номер, который хотите заменить", @onkeydown = "ReplaceSecond(value)" })
     </div>
 
     <div id="InfoPac">
 
     </div>
 
-    <div class="ScanReplace" id="replace">
-        @Html.TextBox("ScanReplace", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте номер платы или серийный номер, который хотите заменить", @onkeydown = "ReplaceFirst(value)" })
-    </div>
-
-
-    <div class="ScanReplace2" id="replace2">
-        @Html.TextBox("ScanReplace2", "", new { @style = "max-width:100%", @size = "500", @autofocus = "on", @placeholder = "Отсканируйте второй номер, который хотите заменить", @onkeydown = "ReplaceSecond(value)" })
-    </div>
-
     <div id="Result">
 
     </div>
 
-    <div>
-        <div class="btn btn-success" onclick="Clear()"> Сбросить </div>
-    </div>
+
 
 
 </div>
@@ -45,10 +42,9 @@
 
 <style>
     div div {
-        margin-top:2%;
-        font-size:18px;
-        color:black;
-
+        margin-top: 2%;
+        font-size: 18px;
+        color: black;
     }
 
     .ScanReplace {
@@ -62,29 +58,24 @@
     .ScanSN {
         visibility: hidden;
     }
-    
-
-   </style>
+</style>
 
 <script>
 
 
 
-    function ScanSN(value) {
+    function ScanSN(obj) {
         if (event.keyCode == 13) {
-            FindSN(value);
+
+            obj.setAttribute("readonly", "readonly");
+            document.getElementById('Result').innerHTML = "";
+            Checkpac(obj);
         };
     }
 
-    function SN() {
+    function RpcF(obj) {
         if (event.keyCode == 13) {
-            GetPacking();
-        };
-    }
-
-    function ReplaceFirst(value) {
-        if (event.keyCode == 13) {
-            ReplaseFind(value);
+            ReplaseFind(obj);
         };
     }
 
@@ -94,20 +85,31 @@
         };
     }
 
-    function FindSN(value) {
-        Find(value, document.getElementById('TB'), document.getElementById('SN'), document.getElementById('ScanSN'));
-    }
-
-    function ReplaseFind(value) {
-
-        if (value == document.getElementById('ScanSN').value) {
-            Check(); return;
-        }
-        else if (value == document.getElementById('TB').value) {
+    function ReplaseFind(obj) {
+            
+        if (obj.value == document.getElementById('TB').value) {
             Check(); return;
         }
 
-        Find(value, document.getElementById('ScanReplace'), document.getElementById('replace2'), document.getElementById('ScanReplace2'));
+        var result = CheckSingle();
+
+        if (result == "False") {
+            alert('Данные по номеру не найдены');
+            obj.value = '';
+            return;
+        }
+        else if (result == "Pac") {
+            alert('Плата упакована');
+            obj.value = '';
+            return;
+        }
+        else if (result == "True") {
+            SetSingleReplace();
+        }        
+        else {
+            obj.setAttribute("readonly", "readonly");
+            GetTBScan(document.getElementById('replace2'), document.getElementById('ScanReplace2'));
+        }
 
         function Check() {
             alert('Такой номер был отсканирован ранее');
@@ -117,35 +119,39 @@
         }
     }
 
-    function Find(value,_tb,obj,scan) {
+    function Checkpac(obj) {
         $.ajax({
-            url: '@Url.Action("FindSN")',
+
+            url: '@Url.Action("Checkpac")',
             dataType: "json",
-            data: { SN: value },
+            data: { SN: obj.value},
             success: function (data) {
 
-                //var _tb = document.getElementById('TB');
+                if (data == "NoData") {
+                    alert('Не найден номер в таблице Ct_FASSN_reg и LazerBase' + obj.value)
+                    obj.value = '';
+                    obj.removeAttribute("readonly");
+                }
+                else if (data == false) {
+                    alert('Номер не упакован!' + obj.value)
+                    obj.value = '';
+                    obj.removeAttribute("readonly");
+                }              
+                else {
+                     GetTBScan(document.getElementById('replace'), document.getElementById('ScanReplace'));
+                     GetPacking(document.getElementById('ScanReplace'));
+                     return;
+                }
 
-                if (data ==  "NoData") {
-                    alert('Не найден номер в таблице Ct_FASSN_reg и LazerBase')
-                    _tb.value = '';
-                }
-                else if (data == "NoPac") {
-                    alert('Номер не упакован, нет данных в таблице Ct_PackingTable')
-                    _tb.value = '';
-                }
-                else if (data == "NoSingle") {
-                    alert('В LOTManagment не указана настройка SingleSN. Вернул NULL')
-                    _tb.value = '';
-                }
-                else if (data == "False") {
-                    _tb.setAttribute("readonly", "readonly");
-                    SingleFalse(obj,scan);
-                }
-                else if (data == "True") {
-                    _tb.setAttribute("readonly", "readonly");
-                    SingleTrue();
-                }
+
+                //else if (data == "False") {
+                //    //_tb.setAttribute("readonly", "readonly");
+                //    SingleFalse(obj,scan);
+                //}
+                //else if (data == "True") {
+                //    //_tb.setAttribute("readonly", "readonly");
+                //    SetReplace2();
+                //}
             },
 
             error: function (data) {
@@ -155,17 +161,26 @@
         });
     }
 
+    function CheckSingle()  {
+       let result = false;
+       $.ajax({
 
-    function SingleTrue() {
-        //var obj = document.getElementById('replace');
-        //obj.style.visibility = "visible";
-        ////GetPacking();
-        //document.getElementById('ScanReplace').focus();
-    }
+           url: '@Url.Action("CheckSingle")',
+           dataType: "json",
+           data: { SNFirst: document.getElementById('TB').value, SN: document.getElementById('ScanReplace').value },
+           async: false,
+           success:  function (data) {
+                result = data;
+           }          
+            
+       })
 
-    function SingleFalse(obj,scan) {
-        obj.style.visibility = "visible";
-        scan.focus();
+        return result;
+    }   
+
+    function GetTBScan(div,tb) {
+        div.style.visibility = "visible";
+        tb.focus();
     }
 
 
@@ -175,9 +190,9 @@
             url: '@Url.Action("SetReplace")',
             dataType: "json",
             data: {
-                SN: $("#ScanSN").val(),
-                FirstSN: $("#TB").val(),
-                SNReplace: $("#ScanReplace").val(),
+                SN: $("#ScanReplace2").val(),
+                FirstSN: $("#ScanReplace").val(),
+                SNReplace: $("#TB").val(),
             },
             success: function (data) {
 
@@ -185,20 +200,30 @@
                     alert('Такой номер уже был отсканирован');
                     obj.value = '';
                     obj.focus();
+                    return;
                 }
                 else if (data == "null") {
                     alert('Данные не найдены');
                     obj.value = '';
                     obj.focus();
+                    return;
                 }
-                else if (data == "fake") {
-                    alert('Номера не связаны');
+                else if (data == "Lot") {
+                    alert('Заказы не совпадают');
                     obj.value = '';
                     obj.focus();
+                    return;
                 }
+                else if (data == "Pac") {
+                    alert('Плата была упакована');
+                    obj.value = '';
+                    obj.focus();
+                    return;
+                }               
 
-                alert('Замена успешно выполнена')
                 Clear();
+                GetResult();
+                alert('Замена успешно выполнена')
 
             },
             error: function(data) {
@@ -208,48 +233,109 @@
         })
     }
 
-    function GetPacking() {
+    function SetSingleReplace() {
+        var obj = document.getElementById('ScanReplace');
+        $.ajax({
+            url: '@Url.Action("SetSingleReplace")',
+            dataType: "json",
+            data: {
+                SN: $("#ScanReplace").val(),
+                SNReplace: $("#TB").val(),
+            },
+            success: function (data) {
+
+                if (data == "Dup") {
+                    alert('Такой номер уже был отсканирован');
+                    obj.value = '';
+                    obj.focus();
+                    return;
+                }
+                else if (data == "null") {
+                    alert('Данные не найдены');
+                    obj.value = '';
+                    obj.focus();
+                    return;
+                }
+                else if (data == "Pac") {
+                    alert('Плата была упакована');
+                    obj.value = '';
+                    obj.focus();
+                    return;
+                }
+                else if (data == "fake") {
+                    alert('Номера не связаны');
+                    obj.value = '';
+                    obj.focus();
+                    return;
+                }
+
+                Clear();
+                GetResult();
+                alert('Замена успешно выполнена')
+
+            },
+            error: function(data) {
+
+            }
+
+        })
+    }
+
+    function GetResult() {
+
+        $.ajax({
+            url: '@Url.Action("GetResult")',
+            dataType: "html",
+            success: function (data) {
+                document.getElementById('Result').innerHTML = data;
+            }
+        });
+    }
+
+    function GetPacking(obj) {
          $.ajax({
                 url: '@Url.Action("GetPacking")',
                 dataType: "html",
                 data: {
-                    SN: $("#ScanSN").val(),
-                    FirstSN: $("#TB").val()
+                    SN: $("#TB").val()
                 },
                 success: function (data) {
                     document.getElementById('InfoPac').innerHTML = data;
-                    document.getElementById('replace').style.visibility = "visible";
-                    document.getElementById('ScanSN').setAttribute("readonly", "readonly");
-                    document.getElementById('ScanReplace').focus();
+                    obj.focus();
                 },
                 error: function (err,e,t) {
                     document.getElementById('InfoPac').innerHTML = '<h2>  Возможно первый и второй номер совпадают или они не связаны или не найдены данные по упаковке  </h2>';
-                    var _tb = document.getElementById('ScanSN');
-                    _tb.value = '';
-                    _tb.focus();
+
                 }
 
             })
     }
 
 
-    function Clear() {
-
-        document.getElementById('SN').style.visibility = "hidden";
+    function Clear() {       
 
         var _replace1 = document.getElementById('replace');
         _replace1.style.visibility = "hidden";
+        _replace1.value = '';
 
-        var _scan = document.getElementById('ScanSN');
-        _scan.value = '';
+        var _replace2 = document.getElementById('replace2');
+        document.getElementById('ScanReplace2').value = '';
+        _replace2.style.visibility = "hidden";
+        _replace2.value = '';
 
-        document.getElementById('ScanReplace').value = '';
+   
+
+        var scanreplace = document.getElementById('ScanReplace');
+        scanreplace.value = '';
+        scanreplace.removeAttribute("readonly");
+
         var _tb = document.getElementById('TB');
+
         document.getElementById('InfoPac').innerHTML = "";
+        document.getElementById('Result').innerHTML = "";
 
         _tb.value = '';
-        _tb.removeAttribute("readonly");
-        _scan.removeAttribute("readonly");
+        _tb.removeAttribute("readonly");       
         _replace1.removeAttribute("readonly");
 
         _tb.focus();

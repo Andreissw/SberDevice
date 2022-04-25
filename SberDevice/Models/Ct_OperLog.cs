@@ -24,5 +24,7 @@ namespace SberDevice.Models
         public Nullable<int> ErrorCodeID { get; set; }
         public string Descriptions { get; set; }
         public Nullable<int> SNID { get; set; }
+    
+        public virtual Contract_LOT Contract_LOT { get; set; }
     }
 }

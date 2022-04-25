@@ -26,6 +26,11 @@ namespace SberDevice.Classes
 
             return true;
         }
+        public void MergeData(ISearch search)
+        {
+            Datas.SN = search.Datas.SN;
+            Datas.ID = search.Datas.ID;
+        }
 
         public InfoPacking GetInfoPacking()
         {
